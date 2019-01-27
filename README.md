@@ -2,7 +2,7 @@
 If you're a serious guitar player, then you know how painful it is to keep track of all songs' tuning.
 
 It's a difficult process of looking up the song, eventually refinding the tab, see the tuning, tune accordingly and play.
-Tabinder is a command line app that helps you do all through a series of simple commands. 
+Tabinder is a command line app that helps you do all of that through a series of simple commands - much faster! 
 Store, modify and look up tabs through the command line, all accessible at a few characters away.
 
 
@@ -19,4 +19,4 @@ Built with Scala for the backend and Python for the command line, it includes fr
   - Scala Cats-Mtl
   - Scala Refined
   - Python Click
-  - Mongo
+  - Mongod
