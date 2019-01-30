@@ -23,7 +23,7 @@ trait TabRepositoryAlgebra[F[_]] {
 }
 
 class TabRepository[F[_]](dbContext: DatabaseContext)(implicit M: MonadError[F, Throwable],
-                                                      fromFuture: FromFuture[F],
+                                                      F: FromFuture[F],
                                                       ec: ExecutionContext) extends BaseDAO[Tab] with TabRepositoryAlgebra[F] {
  // CodecGen[Tab](dbContext.codecRegistry)
 
@@ -45,7 +45,7 @@ class TabRepository[F[_]](dbContext: DatabaseContext)(implicit M: MonadError[F, 
 
   override def getBySong(songName: SongName): F[List[Tab]] = findAll("songName", BsonString(songName))
 
-  private def findAll[T](field: String, value: BsonString)(implicit ct: ClassTag[T]): F[List[T]] = fromFuture {
+  private def findAll[T](field: String, value: BsonString)(implicit ct: ClassTag[T]): F[List[T]] = F.fromFuture {
     collection.find[T](Document(field -> value)).toFuture().map(_.toList)
   }
 }
