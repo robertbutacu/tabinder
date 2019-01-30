@@ -1,4 +1,4 @@
-package models
+package models.types
 
 import eu.timepit.refined.W
 import eu.timepit.refined.api.Refined

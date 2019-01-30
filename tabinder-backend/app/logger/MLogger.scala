@@ -1,6 +1,7 @@
 package logger
 
 import cats.Monad
+import play.api.Logger
 
 import scala.language.higherKinds
 
@@ -10,16 +11,16 @@ trait MLogger[F[_]] {
   def warning(s: String): F[Unit]
 }
 
-class PrintoutMLogger[F[_]](implicit M: Monad[F]) extends MLogger[F] {
+class PlayLogger[F[_]](implicit M: Monad[F]) extends MLogger[F] {
   override def error(s: String): F[Unit]   = M.pure {
-    println(s"[Error] $s")
+    Logger.error(s"[Error] $s")
   }
 
   override def message(s: String): F[Unit] = M.pure {
-    println(s"[Message] $s")
+    Logger.debug(s"[Message] $s")
   }
 
   override def warning(s: String): F[Unit] = M.pure {
-    println(s"[Warning] $s")
+    Logger.warn(s"[Warning] $s")
   }
 }

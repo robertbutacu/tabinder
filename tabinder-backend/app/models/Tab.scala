@@ -1,6 +1,6 @@
 package models
 
-import models.Types.{Artist, SongName, Tuning}
+import models.types.Types.{Artist, SongName, Tuning}
 import play.api.libs.json.{Format, Json}
 import models._
 import org.mongodb.scala.bson.collection.immutable.Document

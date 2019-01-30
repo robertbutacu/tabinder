@@ -1,7 +1,7 @@
 package services
 
 import models.Tab
-import models.Types.{Artist, SongName, Tuning}
+import models.types.Types.{Artist, SongName, Tuning}
 import repositories.TabRepositoryAlgebra
 
 import scala.language.higherKinds

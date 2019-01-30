@@ -1,12 +1,11 @@
 package repositories
 
-import ai.snips.bsonmacros.{BaseDAO, CodecGen, DatabaseContext}
+import ai.snips.bsonmacros.{BaseDAO, DatabaseContext}
 import cats.MonadError
 import models.Tab
-import models.Types.{Artist, SongName, Tuning}
+import models.types.Types.{Artist, SongName, Tuning}
 import models._
 import eu.timepit.refined.auto._
-import org.bson.conversions.Bson
 import org.mongodb.scala.bson.collection.immutable.Document
 import org.mongodb.scala.bson.BsonString
 import utils.FromFuture
