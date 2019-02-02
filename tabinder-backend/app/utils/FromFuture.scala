@@ -2,8 +2,10 @@ package utils
 
 import play.api.mvc.{AnyContent, Request}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.language.higherKinds
+import scala.util.{Failure, Success, Try}
 
 trait FromFuture[F[_]] {
   def fromFuture[R](f: => Future[R])(implicit ec: ExecutionContext): F[R]
@@ -15,5 +17,20 @@ object FromFuture {
     override def fromFuture[R](f: => Future[R])(implicit ec: ExecutionContext): Future[R] = f
 
     override def toFuture[R](f: => Future[R])(implicit request: Request[AnyContent], ec: ExecutionContext): Future[R] = f
+  }
+
+
+  // helpful for testing maybe???
+  implicit val tryFromFuture: FromFuture[Try] = new FromFuture[Try] {
+    override def fromFuture[R](f: => Future[R])(implicit ec: ExecutionContext): Try[R] = {
+      Try(f.result(Duration.Inf))
+    }
+
+    override def toFuture[R](f: => Try[R])(implicit request: Request[AnyContent], ec: ExecutionContext): Future[R] = {
+      f match {
+        case Success(r)   => Future.successful(r)
+        case Failure(err) => Future.failed(err)
+      }
+    }
   }
 }
