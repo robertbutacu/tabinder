@@ -4,5 +4,9 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
-      
+GET       /                                    controllers.HomeController.index
+GET       /tabinder/tabs/:artistName           controllers.TabController.getByArtist(artistName)
+GET       /tabinder/tabs/:songName             controllers.TabController.getBySong(songName)
+GET       /tabinder/tabs/:tuning               controllers.TabController.getByTuning(tuning)
+POST      /tabinder/tabs                       controllers.TabController.post
+DELETE    /tabinder/tabs                       controllers.TabController.delete

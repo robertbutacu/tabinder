@@ -12,22 +12,21 @@ import utils.FromFuture
 import scala.concurrent.ExecutionContext
 import scala.language.higherKinds
 
-trait TabControllerAlgebra[F[_]] {
+trait TabControllerAlgebra {
   def post(): Action[AnyContent]
-
   def delete(): Action[AnyContent]
 
-  def getByArtist(artist: Artist): Action[AnyContent]
-
-  def getByTuning(tuning: Tuning): Action[AnyContent]
-
+  def getByArtist(artist: Artist):  Action[AnyContent]
+  def getByTuning(tuning: Tuning):  Action[AnyContent]
   def getBySong(songName: SongName): Action[AnyContent]
 }
 
-class TabController[F[_]](tabService: TabServiceAlgebra[F], cc: ControllerComponents)
-                         (implicit ec: ExecutionContext, M: Monad[F], F: FromFuture[F])
+trait TabController extends TabControllerAlgebra
+
+class TabControllerImpl[F[_]](tabService: TabServiceAlgebra[F], cc: ControllerComponents)
+                             (implicit ec: ExecutionContext, M: Monad[F], F: FromFuture[F])
   extends AbstractController(cc)
-    with TabControllerAlgebra[F]
+    with TabController
     with BaseController {
 
   override def post(): Action[AnyContent] = Action.async {
