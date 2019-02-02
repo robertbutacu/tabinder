@@ -1,9 +1,10 @@
 package utils
 
+import cats.effect.IO
 import play.api.mvc.{AnyContent, Request}
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 import scala.util.{Failure, Success, Try}
 
@@ -31,6 +32,16 @@ object FromFuture {
         case Success(r)   => Future.successful(r)
         case Failure(err) => Future.failed(err)
       }
+    }
+  }
+
+  implicit val ioFromFuture: FromFuture[IO] = new FromFuture[IO] {
+    override def fromFuture[R](f: => Future[R])(implicit ec: ExecutionContext): IO[R] = {
+      IO.fromFuture(IO(f))
+    }
+
+    override def toFuture[R](f: => IO[R])(implicit request: Request[AnyContent], ec: ExecutionContext): Future[R] = {
+      f.unsafeToFuture()
     }
   }
 }
