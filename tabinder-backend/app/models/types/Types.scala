@@ -8,10 +8,11 @@ import eu.timepit.refined.collection.Forall
 import eu.timepit.refined.string.MatchesRegex
 
 object Types {
+
   type Artist   = Refined[String, ValidArtistName]
   type SongName = String
   type Tuning   = Refined[String, ValidTuningFormat]
 
-  private type ValidArtistName   = Forall[Or[UpperCase, Whitespace]]
-  private type ValidTuningFormat = MatchesRegex[W.`"""([ABCDEFG](#)?){6}"""`.T]
+  type ValidArtistName   = Forall[Or[UpperCase, Whitespace]]
+  type ValidTuningFormat = MatchesRegex[W.`"""([ABCDEFG](#)?){6}"""`.T]
 }

@@ -17,7 +17,17 @@ libraryDependencies ++= Seq(
   "com.olegpy"        %% "meow-mtl"           % "0.2.0",
   "org.scalacheck"    %% "scalacheck"         % "1.14.0",
   "ai.snips"          %% "play-mongo-bson"    % "0.5.1",
-  "org.mongodb.scala" %% "mongo-scala-driver" % "2.5.0"
+  "org.mongodb.scala" %% "mongo-scala-driver" % "2.5.0",
+  "be.venneborg"      %% "play26-refined"          % "0.3.0"
+)
+routesGenerator := InjectedRoutesGenerator
+
+routesImport ++= Seq(
+  "be.venneborg.refined.play.RefinedPathBinders._",
+  "be.venneborg.refined.play.RefinedQueryBinders._",
+  "models.types.Types.Tuning", //This depends on the refined types you want to use
+  "models.types.Types.Artist", //This depends on the refined types you want to use
+  "models.types.Types.SongName" //This depends on the refined types you want to use
 )
 
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
