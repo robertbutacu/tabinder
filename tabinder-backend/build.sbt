@@ -13,12 +13,13 @@ scalaVersion := "2.12.2"
 
 libraryDependencies ++= Seq(jdbc, ehcache, ws, specs2 % Test, guice)
 libraryDependencies ++= Seq(
-  "eu.timepit"        %% "refined"            % "0.9.4",
-  "com.olegpy"        %% "meow-mtl"           % "0.2.0",
-  "org.scalacheck"    %% "scalacheck"         % "1.14.0",
-  "ai.snips"          %% "play-mongo-bson"    % "0.5.1",
-  "org.mongodb.scala" %% "mongo-scala-driver" % "2.5.0",
-  "be.venneborg"      %% "play26-refined"          % "0.3.0"
+  "eu.timepit"               %% "refined"            % "0.9.4",
+  "com.olegpy"               %% "meow-mtl"           % "0.2.0",
+  "org.scalacheck"           %% "scalacheck"         % "1.14.0",
+  "ai.snips"                 %% "play-mongo-bson"    % "0.5.1",
+  "org.mongodb.scala"        %% "mongo-scala-driver" % "2.5.0",
+  "be.venneborg"             %% "play26-refined"     % "0.3.0",
+  "com.softwaremill.macwire" %% "macros"             % "2.3.1"
 )
 routesGenerator := InjectedRoutesGenerator
 
