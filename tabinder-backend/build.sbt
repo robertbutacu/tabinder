@@ -25,9 +25,7 @@ routesGenerator := InjectedRoutesGenerator
 routesImport ++= Seq(
   "be.venneborg.refined.play.RefinedPathBinders._",
   "be.venneborg.refined.play.RefinedQueryBinders._",
-  "models.types.Types.Tuning", //This depends on the refined types you want to use
-  "models.types.Types.Artist", //This depends on the refined types you want to use
-  "models.types.Types.SongName" //This depends on the refined types you want to use
+  "models.types.Types._" //This depends on the refined types you want to use
 )
 
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
