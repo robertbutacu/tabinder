@@ -6,6 +6,7 @@ import models.Tab
 import models.types.Types.{Artist, SongName, Tuning}
 import models._
 import eu.timepit.refined.auto._
+import org.mongodb.scala.MongoCollection
 import org.mongodb.scala.bson.collection.immutable.Document
 import org.mongodb.scala.bson.BsonString
 import utils.FromFuture
@@ -20,6 +21,7 @@ trait TabRepositoryAlgebra[F[_]] {
   def getByArtist(artist: Artist):   F[List[Tab]]
   def getByTuning(tuning: Tuning):   F[List[Tab]]
   def getBySong(songName: SongName): F[List[Tab]]
+  def getAll():                      F[List[Tab]]
 }
 
 class TabRepository[F[_]](dbContext: DatabaseContext)(implicit M: MonadError[F, Throwable],
@@ -29,7 +31,7 @@ class TabRepository[F[_]](dbContext: DatabaseContext)(implicit M: MonadError[F, 
 
   val db = dbContext.database("sample_db")
 
-  override val collection = db.getCollection[Tab]("tabs")
+  override val collection: MongoCollection[Tab] = db.getCollection[Tab]("tabs")
 
   override def create(tab: Tab): F[Unit] = M.pure {
     collection.insertOne(tab)
@@ -48,4 +50,6 @@ class TabRepository[F[_]](dbContext: DatabaseContext)(implicit M: MonadError[F, 
   private def findAll[T](field: String, value: BsonString)(implicit ct: ClassTag[T]): F[List[T]] = F.fromFuture {
     collection.find[T](Document(field -> value)).toFuture().map(_.toList)
   }
+
+  override def getAll(): F[List[Tab]] = F.fromFuture{ collection.find().toFuture().map(_.toList) }
 }

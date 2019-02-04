@@ -12,6 +12,7 @@ trait TabServiceAlgebra[F[_]] {
   def getByArtist(artist: Artist):   F[List[Tab]]
   def getByTuning(tuning: Tuning):   F[List[Tab]]
   def getBySong(songName: SongName): F[List[Tab]]
+  def getAll():                      F[List[Tab]]
 }
 
 class TabService[F[_]](tabRepository: TabRepositoryAlgebra[F]) extends TabServiceAlgebra[F] {
@@ -24,4 +25,6 @@ class TabService[F[_]](tabRepository: TabRepositoryAlgebra[F]) extends TabServic
   override def getByTuning(tuning: Tuning): F[List[Tab]] = tabRepository.getByTuning(tuning)
 
   override def getBySong(songName: SongName): F[List[Tab]] = tabRepository.getBySong(songName)
+
+  override def getAll(): F[List[Tab]] = tabRepository.getAll()
 }

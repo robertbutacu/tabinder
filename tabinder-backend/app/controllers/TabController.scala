@@ -19,6 +19,7 @@ trait TabControllerAlgebra {
   def getByArtist(artist: Artist):  Action[AnyContent]
   def getByTuning(tuning: Tuning):  Action[AnyContent]
   def getBySong(songName: SongName): Action[AnyContent]
+  def getAll(): Action[AnyContent]
 }
 
 trait TabController extends TabControllerAlgebra
@@ -67,5 +68,10 @@ class TabControllerImpl[F[_]](tabService: TabServiceAlgebra[F], cc: ControllerCo
         tabService.getBySong(songName).map(tabs => Ok(Json.toJson(tabs)))
       }
     }
+  }
+
+  override def getAll(): Action[AnyContent] = Action.async {
+    implicit request: Request[AnyContent] =>
+      F.toFuture(tabService.getAll().map(tabs => Ok(Json.toJson(tabs))))
   }
 }

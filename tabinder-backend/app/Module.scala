@@ -1,19 +1,18 @@
-
 import com.google.inject.AbstractModule
+import play.api.ApplicationLoader.Context
+import play.api.{Application, ApplicationLoader, LoggerConfigurator}
+import utils.AppLoader
 
-/**
- * This class is a Guice module that tells Guice how to bind several
- * different types. This Guice module is created when the Play
- * application starts.
+class Module extends AbstractModule with ApplicationLoader {
+  def load(context: Context): Application = {
+    LoggerConfigurator(context.environment.classLoader).foreach { configurator =>
+      configurator.configure(context.environment)
+    }
 
- * Play will automatically use any class called `Module` that is in
- * the root package. You can create modules in other locations by
- * adding `play.modules.enabled` settings to the `application.conf`
- * configuration file.
- */
-class Module extends AbstractModule {
-
-  override def configure() = {
+    new AppLoader(context).application
   }
 
+  override def configure(): Unit = {
+
+  }
 }
