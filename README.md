@@ -16,7 +16,6 @@ List of commands:
 Built with Scala for the backend and Python for the command line, it includes frameworks and libraries like:
   - Scala Play
   - Scala Cats
-  - Scala Cats-Mtl
   - Scala Refined
   - Python Click
   - Mongod
