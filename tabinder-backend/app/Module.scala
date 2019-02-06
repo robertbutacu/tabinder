@@ -13,6 +13,5 @@ class Module extends AbstractModule with ApplicationLoader {
   }
 
   override def configure(): Unit = {
-
   }
 }

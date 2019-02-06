@@ -14,13 +14,6 @@ trait FromFuture[F[_]] {
 }
 
 object FromFuture {
-  implicit val futureFromFuture: FromFuture[Future] = new FromFuture[Future] {
-    override def fromFuture[R](f: => Future[R])(implicit ec: ExecutionContext): Future[R] = f
-
-    override def toFuture[R](f: => Future[R])(implicit request: Request[AnyContent], ec: ExecutionContext): Future[R] = f
-  }
-
-
   // helpful for testing maybe???
   implicit val tryFromFuture: FromFuture[Try] = new FromFuture[Try] {
     override def fromFuture[R](f: => Future[R])(implicit ec: ExecutionContext): Try[R] = {

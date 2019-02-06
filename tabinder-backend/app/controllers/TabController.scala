@@ -12,7 +12,7 @@ import utils.FromFuture
 import scala.concurrent.ExecutionContext
 import scala.language.higherKinds
 
-trait TabControllerAlgebra {
+trait TabController {
   def post(): Action[AnyContent]
   def delete(): Action[AnyContent]
 
@@ -22,14 +22,11 @@ trait TabControllerAlgebra {
   def getAll(): Action[AnyContent]
 }
 
-trait TabController extends TabControllerAlgebra
-
 class TabControllerImpl[F[_]](tabService: TabServiceAlgebra[F], cc: ControllerComponents)
                              (implicit ec: ExecutionContext, M: Monad[F], F: FromFuture[F])
   extends AbstractController(cc)
     with TabController
     with BaseController {
-
   override def post(): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
       F.toFuture {
