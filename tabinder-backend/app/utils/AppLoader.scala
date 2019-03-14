@@ -4,7 +4,7 @@ import ai.snips.bsonmacros.DatabaseContext
 import app.Routes
 import cats.Monad
 import cats.effect.IO
-import controllers.{TabController, TabControllerImpl}
+import controllers.{TabControllerAlgebra, TabController}
 import logger.{MLogger, PlayLogger}
 import play.api.ApplicationLoader.Context
 import play.api.mvc._
@@ -19,6 +19,7 @@ import repositories.{TabRepository, TabRepositoryAlgebra}
 import scala.concurrent.{ExecutionContext, Future}
 
 
+/*
 class AppLoader(context: Context) extends BuiltInComponentsFromContext(context)
   with EffectSupport {
 
@@ -41,3 +42,4 @@ class AppLoader(context: Context) extends BuiltInComponentsFromContext(context)
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty[EssentialFilter]
 }
+*/

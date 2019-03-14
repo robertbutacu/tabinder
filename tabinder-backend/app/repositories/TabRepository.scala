@@ -2,13 +2,14 @@ package repositories
 
 import ai.snips.bsonmacros.{BaseDAO, DatabaseContext}
 import cats.MonadError
+import cats.effect.IO
+import eu.timepit.refined.auto._
+import javax.inject.Inject
 import models.Tab
 import models.types.Types.{Artist, SongName, Tuning}
-import models._
-import eu.timepit.refined.auto._
 import org.mongodb.scala.MongoCollection
-import org.mongodb.scala.bson.collection.immutable.Document
 import org.mongodb.scala.bson.BsonString
+import org.mongodb.scala.bson.collection.immutable.Document
 import utils.FromFuture
 
 import scala.concurrent.ExecutionContext
@@ -24,11 +25,9 @@ trait TabRepositoryAlgebra[F[_]] {
   def getAll():                      F[List[Tab]]
 }
 
-class TabRepository[F[_]](dbContext: DatabaseContext)(implicit M: MonadError[F, Throwable],
+class TabRepository[F[_]] @Inject()(dbContext: DatabaseContext)(implicit M: MonadError[F, Throwable],
                                                       F: FromFuture[F],
                                                       ec: ExecutionContext) extends BaseDAO[Tab] with TabRepositoryAlgebra[F] {
- // CodecGen[Tab](dbContext.codecRegistry)
-
   val db = dbContext.database("sample_db")
 
   override val collection: MongoCollection[Tab] = db.getCollection[Tab]("tabs")
@@ -53,3 +52,5 @@ class TabRepository[F[_]](dbContext: DatabaseContext)(implicit M: MonadError[F, 
 
   override def getAll(): F[List[Tab]] = F.fromFuture{ collection.find().toFuture().map(_.toList) }
 }
+
+class IOTabRepository @Inject()(dbContext: DatabaseContext)(implicit ec: ExecutionContext) extends TabRepository[IO](dbContext)

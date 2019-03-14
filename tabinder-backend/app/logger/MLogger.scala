@@ -1,6 +1,7 @@
 package logger
 
 import cats.Monad
+import javax.inject.Inject
 import play.api.Logger
 
 import scala.language.higherKinds
@@ -11,7 +12,7 @@ trait MLogger[F[_]] {
   def warning(s: String): F[Unit]
 }
 
-class PlayLogger[F[_]](implicit M: Monad[F]) extends MLogger[F] {
+class PlayLogger[F[_]] @Inject()(implicit M: Monad[F]) extends MLogger[F] {
   override def error(s: String): F[Unit]   = M.pure {
     Logger.error(s"[Error] $s")
   }

@@ -21,7 +21,6 @@ libraryDependencies ++= Seq(
   "be.venneborg"             %% "play26-refined"     % "0.3.0",
   "com.softwaremill.macwire" %% "macros"             % "2.3.1"
 )
-routesGenerator := InjectedRoutesGenerator
 
 routesImport ++= Seq(
   "be.venneborg.refined.play.RefinedPathBinders._",

@@ -28,6 +28,12 @@ object FromFuture {
     }
   }
 
+  implicit val futureFromFuture: FromFuture[Future] = new FromFuture[Future] {
+    override def fromFuture[R](f: => Future[R])(implicit ec: ExecutionContext): Future[R] = f
+
+    override def toFuture[R](f: => Future[R])(implicit request: Request[AnyContent], ec: ExecutionContext): Future[R] = f
+  }
+
   implicit val ioFromFuture: FromFuture[IO] = new FromFuture[IO] {
     override def fromFuture[R](f: => Future[R])(implicit ec: ExecutionContext): IO[R] = {
       IO.fromFuture(IO(f))
