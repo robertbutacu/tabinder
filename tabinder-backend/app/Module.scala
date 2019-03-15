@@ -3,9 +3,6 @@ import com.google.inject.{AbstractModule, TypeLiteral}
 import controllers.{IOTabController, TabControllerAlgebra}
 import repositories.{IOTabRepository, TabRepositoryAlgebra}
 import services.{IOTabService, TabServiceAlgebra}
-import cats.instances.future._
-
-import scala.concurrent.Future
 
 class Module extends AbstractModule {
   override def configure(): Unit = {
