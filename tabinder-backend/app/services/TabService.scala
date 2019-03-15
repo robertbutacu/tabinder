@@ -35,13 +35,33 @@ class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F], 
     } yield ()
   }
 
-  override def getByArtist(artist: Artist): F[List[Tab]] = tabRepository.getByArtist(artist)
+  override def getByArtist(artist: Artist): F[List[Tab]] = {
+    for {
+      _    <- logger.message("Retrieving all tabs by artist:" + artist)
+      tabs <- tabRepository.getByArtist(artist)
+    } yield tabs
+  }
 
-  override def getByTuning(tuning: Tuning): F[List[Tab]] = tabRepository.getByTuning(tuning)
+  override def getByTuning(tuning: Tuning): F[List[Tab]] = {
+    for {
+      _    <- logger.message("Retrieving all tabs by tuning:" + tuning)
+      tabs <- tabRepository.getByTuning(tuning)
+    } yield tabs
+  }
 
-  override def getBySong(songName: SongName): F[List[Tab]] = tabRepository.getBySong(songName)
+  override def getBySong(songName: SongName): F[List[Tab]] = {
+    for {
+      _    <- logger.message("Retrieving all tabs by song:" + songName)
+      tabs <- tabRepository.getBySong(songName)
+    } yield tabs
+  }
 
-  override def getAll(): F[List[Tab]] = tabRepository.getAll()
+  override def getAll(): F[List[Tab]] = {
+    for {
+      _    <- logger.message("Retrieving all songs")
+      tabs <- tabRepository.getAll()
+    } yield tabs
+  }
 }
 
 class IOTabService @Inject()(tabRepository: TabRepositoryAlgebra[IO], logger: MLogger[IO]) extends TabService[IO](tabRepository, logger)
