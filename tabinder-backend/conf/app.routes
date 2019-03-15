@@ -5,8 +5,8 @@
 
 # An example controller showing a sample home page
 GET       /tabinder/tabs                       controllers.TabControllerAlgebra.getAll()
-GET       /tabinder/tabs/:artistName           controllers.TabControllerAlgebra.getByArtist(artistName: Artist)
-GET       /tabinder/tabs/:songName             controllers.TabControllerAlgebra.getBySong(songName: SongName)
-GET       /tabinder/tabs/:tuning               controllers.TabControllerAlgebra.getByTuning(tuning: Tuning)
+GET       /tabinder/tabs/artist/:artistName           controllers.TabControllerAlgebra.getByArtist(artistName: Artist)
+GET       /tabinder/tabs/song/:songName             controllers.TabControllerAlgebra.getBySong(songName: SongName)
+GET       /tabinder/tabs/tuning/:tuning               controllers.TabControllerAlgebra.getByTuning(tuning: Tuning)
 POST      /tabinder/tabs                       controllers.TabControllerAlgebra.post
 DELETE    /tabinder/tabs                       controllers.TabControllerAlgebra.delete
