@@ -4,15 +4,14 @@ import cats.Monad
 import cats.effect.IO
 import cats.syntax.functor._
 import javax.inject.Inject
-import play.api.mvc._
-import models.types.Types.{Artist, SongName, Tuning}
 import models._
+import models.types.Types.{Artist, SongName, Tuning}
 import play.api.libs.json.Json
+import play.api.mvc._
 import services.TabServiceAlgebra
 import utils.FromFuture
-import cats.instances.future._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 import scala.language.higherKinds
 
 trait TabControllerAlgebra {
