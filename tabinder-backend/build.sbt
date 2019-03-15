@@ -15,13 +15,13 @@ scalaVersion := "2.12.2"
 
 libraryDependencies ++= Seq(jdbc, ehcache, ws, specs2 % Test, guice)
 libraryDependencies ++= Seq(
-  "eu.timepit"        %% "refined"                 % "0.9.4",
-  "org.typelevel"     %% "cats-core"               % "1.6.0",
-  "org.typelevel"     %% "cats-effect"             % "1.2.0",
-  "org.scalacheck"    %% "scalacheck"              % "1.14.0",
-  "org.reactivemongo" %% "reactivemongo-play-json" % "0.16.3-play26",
-  "org.reactivemongo" %% "play2-reactivemongo"     % reactiveMongoVer,
-  "be.venneborg"      %% "play26-refined"          % "0.3.0"
+  "eu.timepit"        %% "refined"                  % "0.9.4",
+  "org.typelevel"     %% "cats-core"                % "1.6.0",
+  "org.typelevel"     %% "cats-effect"              % "1.2.0",
+  "org.scalacheck"    %% "scalacheck"               % "1.14.0",
+  "org.reactivemongo" %% "reactivemongo-play-json"  % "0.16.0-play26",
+  "org.reactivemongo" %% "play2-reactivemongo"      % reactiveMongoVer,
+  "be.venneborg"      %% "play26-refined"           % "0.3.0"
 )
 
 routesImport ++= Seq(

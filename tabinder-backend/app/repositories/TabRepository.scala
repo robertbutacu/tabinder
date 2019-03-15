@@ -53,7 +53,7 @@ class TabRepository[F[_]] @Inject()()(implicit M: MonadError[F, Throwable],
 
   private def findAll(field: String, value: String): F[List[Tab]] = {
     collection.flatMap(c => F.fromFuture {
-      c.find(Json.obj("field" -> JsString(value)), None)(implicitly[ImplicitBSONHandlers.JsObjectDocumentWriter.type], implicitly[ImplicitBSONHandlers.JsObjectDocumentWriter.type])
+      c.find(Json.obj(field -> JsString(value)))(implicitly[ImplicitBSONHandlers.JsObjectDocumentWriter.type])
         .cursor[Tab](ReadPreference.primaryPreferred)
         .collect(Int.MaxValue, FailOnError[List[Tab]]())
     })
