@@ -1,6 +1,7 @@
 package logger
 
 import cats.Monad
+import cats.effect.IO
 import javax.inject.Inject
 import play.api.Logger
 
@@ -25,3 +26,5 @@ class PlayLogger[F[_]] @Inject()(implicit M: Monad[F]) extends MLogger[F] {
     Logger.warn(s"[Warning] $s")
   }
 }
+
+class IOPlayLogger extends PlayLogger[IO]

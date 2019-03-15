@@ -5,7 +5,7 @@ import cats.effect.IO
 import javax.inject.Inject
 import models.Tab
 import models.types.Types.{Artist, SongName, Tuning}
-import play.api.libs.json.{JsString, Json}
+import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.api.Cursor.FailOnError
 import reactivemongo.api.ReadPreference
@@ -13,6 +13,8 @@ import reactivemongo.play.json.collection.JSONCollection
 import utils.FromFuture
 import cats.syntax.flatMap._
 import reactivemongo.play.json.ImplicitBSONHandlers
+import reactivemongo.play.json.JSONSerializationPack.Writer
+
 import scala.concurrent.ExecutionContext
 import scala.language.higherKinds
 
@@ -35,25 +37,21 @@ class TabRepository[F[_]] @Inject()()(implicit M: MonadError[F, Throwable],
     reactiveMongoApi.database.map(_.collection("tabinder"))
   }
 
-  override def create(tab: Tab): F[Unit] = M.pure {
-    collection.flatMap(c => F.fromFuture(c.insert(tab)))
-  }
+  override def create(tab: Tab): F[Unit] = collection.flatMap(c => F.fromFuture(c.insert(tab).map(_ => ())))
 
-  override def remove(tab: Tab): F[Unit] = M.pure {
-    collection.flatMap(c => F.fromFuture{ c.findAndRemove(tab).map(_ => ()) } )
-  }
+  override def remove(tab: Tab): F[Unit] = collection.flatMap(c => F.fromFuture{ c.findAndRemove(tab).map(_ => ()) } )
 
-  override def getByArtist(artist: Artist): F[List[Tab]] = findAll("artist", artist.value)
+  override def getByArtist(artist: Artist): F[List[Tab]] = findAll(Json.obj("artist" -> artist.value))
 
-  override def getByTuning(tuning: Tuning): F[List[Tab]] = findAll("tuning", tuning.value)
+  override def getByTuning(tuning: Tuning): F[List[Tab]] = findAll(Json.obj("tuning" -> tuning.value))
 
-  override def getBySong(songName: SongName): F[List[Tab]] = findAll("songName", songName)
+  override def getBySong(songName: SongName): F[List[Tab]] = findAll(Json.obj("songName" -> songName))
 
-  override def getAll(): F[List[Tab]] = findAll("", "")
+  override def getAll(): F[List[Tab]] = findAll(JsObject.empty)
 
-  private def findAll(field: String, value: String): F[List[Tab]] = {
+  private def findAll(jsObject: JsObject): F[List[Tab]] = {
     collection.flatMap(c => F.fromFuture {
-      c.find(Json.obj(field -> JsString(value)))(implicitly[ImplicitBSONHandlers.JsObjectDocumentWriter.type])
+      c.find(jsObject)(implicitly[ImplicitBSONHandlers.JsObjectDocumentWriter.type])
         .cursor[Tab](ReadPreference.primaryPreferred)
         .collect(Int.MaxValue, FailOnError[List[Tab]]())
     })
