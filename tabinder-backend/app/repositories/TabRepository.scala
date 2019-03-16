@@ -4,7 +4,7 @@ import cats.syntax.flatMap._
 import cats.{MonadError, ~>}
 import javax.inject.Inject
 import models.Tab
-import models.types.Types.{Artist, SongName, Tuning}
+import models.types.Types.{Artist, SongName, ThrowableMonadError, Tuning}
 import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.api.Cursor.FailOnError
@@ -24,10 +24,9 @@ trait TabRepositoryAlgebra[F[_]] {
   def getAll():                      F[List[Tab]]
 }
 
-class TabRepository[F[_]] @Inject()()(implicit M: MonadError[F, Throwable],
-                                      fromFuture: Future ~> F,
-                                      reactiveMongoApi: ReactiveMongoApi,
-                                      ec: ExecutionContext) extends TabRepositoryAlgebra[F] {
+class TabRepository[F[_]: ThrowableMonadError] @Inject()()(implicit fromFuture: Future ~> F,
+                                                           reactiveMongoApi: ReactiveMongoApi,
+                                                           ec: ExecutionContext) extends TabRepositoryAlgebra[F] {
 
   def collection: F[JSONCollection] = fromFuture {
     reactiveMongoApi.database.map(_.collection("tabinder"))
