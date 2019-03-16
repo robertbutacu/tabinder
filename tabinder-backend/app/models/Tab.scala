@@ -8,6 +8,5 @@ import eu.timepit.refined.auto._
 case class Tab(artist: Artist, songName: SongName, tuning: Tuning)
 
 object Tab {
-
   implicit val format: OFormat[Tab] = Json.format[Tab]
 }

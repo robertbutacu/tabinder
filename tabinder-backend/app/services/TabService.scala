@@ -64,4 +64,5 @@ class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F], 
   }
 }
 
-class IOTabService @Inject()(tabRepository: TabRepositoryAlgebra[IO], logger: MLogger[IO]) extends TabService[IO](tabRepository, logger)
+class IOTabService @Inject()(tabRepository: TabRepositoryAlgebra[IO],
+                             logger: MLogger[IO]) extends TabService[IO](tabRepository, logger)

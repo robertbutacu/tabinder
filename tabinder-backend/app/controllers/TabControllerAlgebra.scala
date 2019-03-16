@@ -1,7 +1,8 @@
 package controllers
 
-import cats.{Monad, MonadError}
+import cats.{MonadError, ~>}
 import cats.effect.IO
+import utils.FromFuture.ioToFuture
 import cats.syntax.functor._
 import javax.inject.Inject
 import logger.MLogger
@@ -10,9 +11,8 @@ import models.types.Types.{Artist, SongName, Tuning}
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.TabServiceAlgebra
-import utils.FromFuture
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
 trait TabControllerAlgebra {
@@ -28,13 +28,13 @@ trait TabControllerAlgebra {
 class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
                                     cc: ControllerComponents,
                                     val logger: MLogger[F])
-                                   (implicit ec: ExecutionContext, M: MonadError[F, Throwable], F: FromFuture[F])
+                                   (implicit ec: ExecutionContext, toFuture: F ~> Future, M: MonadError[F, Throwable])
   extends AbstractController(cc)
     with TabControllerAlgebra
     with BaseController[F] {
   override def post(): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
-      F.toFuture {
+      toFuture {
         withRecover {
           withValidJson[Tab] {
             tab => tabService.post(tab).map(_ => Ok)
@@ -45,7 +45,7 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
 
   override def delete(): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
-      F.toFuture {
+      toFuture {
         withRecover {
           withValidJson[Tab] {
             tab => tabService.delete(tab).map(_ => Ok)
@@ -56,7 +56,7 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
 
   override def getByArtist(artist: Artist): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
-      F.toFuture {
+      toFuture {
         withRecover {
           tabService.getByArtist(artist).map(tabs => Ok(Json.toJson(tabs)))
         }
@@ -65,7 +65,7 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
 
   override def getByTuning(tuning: Tuning): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
-      F.toFuture {
+      toFuture {
         withRecover {
           tabService.getByTuning(tuning).map(tabs => Ok(Json.toJson(tabs)))
         }
@@ -74,7 +74,7 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
 
   override def getBySong(songName: SongName): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] => {
-      F.toFuture {
+      toFuture {
         withRecover {
           tabService.getBySong(songName).map(tabs => Ok(Json.toJson(tabs)))
         }
@@ -84,7 +84,7 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
 
   override def getAll(): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
-      F.toFuture {
+      toFuture {
         withRecover {
           tabService.getAll().map(tabs => Ok(Json.toJson(tabs)))
         }
