@@ -1,7 +1,7 @@
 package repositories
 
+import cats.syntax.flatMap._
 import cats.{MonadError, ~>}
-import cats.effect.IO
 import javax.inject.Inject
 import models.Tab
 import models.types.Types.{Artist, SongName, Tuning}
@@ -9,12 +9,11 @@ import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.api.Cursor.FailOnError
 import reactivemongo.api.ReadPreference
-import reactivemongo.play.json.collection.JSONCollection
-import cats.syntax.flatMap._
 import reactivemongo.play.json.ImplicitBSONHandlers
+import reactivemongo.play.json.collection.JSONCollection
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
-import utils.FromFuture.futureToIo
 
 trait TabRepositoryAlgebra[F[_]] {
   def create(tab: Tab): F[Unit]
@@ -54,6 +53,3 @@ class TabRepository[F[_]] @Inject()()(implicit M: MonadError[F, Throwable],
     })
   }
 }
-
-class IOTabRepository @Inject()(implicit reactiveMongoApi: ReactiveMongoApi,
-                                ec: ExecutionContext) extends TabRepository[IO]

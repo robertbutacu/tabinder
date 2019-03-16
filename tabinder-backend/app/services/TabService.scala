@@ -1,14 +1,14 @@
 package services
 
 import cats.Monad
-import cats.effect.IO
+import cats.syntax.flatMap._
+import cats.syntax.functor._
 import javax.inject.Inject
 import logger.MLogger
 import models.Tab
 import models.types.Types.{Artist, SongName, Tuning}
 import repositories.TabRepositoryAlgebra
-import cats.syntax.flatMap._
-import cats.syntax.functor._
+
 import scala.language.higherKinds
 
 trait TabServiceAlgebra[F[_]] {
@@ -63,6 +63,3 @@ class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F], 
     } yield tabs
   }
 }
-
-class IOTabService @Inject()(tabRepository: TabRepositoryAlgebra[IO],
-                             logger: MLogger[IO]) extends TabService[IO](tabRepository, logger)

@@ -1,9 +1,10 @@
 import cats.effect.IO
 import com.google.inject.{AbstractModule, TypeLiteral}
-import controllers.{IOTabController, TabControllerAlgebra}
+import concrete.Concrete._
+import controllers.TabControllerAlgebra
 import logger.{IOPlayLogger, MLogger}
-import repositories.{IOTabRepository, TabRepositoryAlgebra}
-import services.{IOTabService, TabServiceAlgebra}
+import repositories.TabRepositoryAlgebra
+import services.TabServiceAlgebra
 
 class Module extends AbstractModule {
   override def configure(): Unit = {

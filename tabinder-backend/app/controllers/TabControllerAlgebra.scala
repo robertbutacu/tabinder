@@ -1,9 +1,7 @@
 package controllers
 
-import cats.{MonadError, ~>}
-import cats.effect.IO
-import utils.FromFuture.ioToFuture
 import cats.syntax.functor._
+import cats.{MonadError, ~>}
 import javax.inject.Inject
 import logger.MLogger
 import models._
@@ -91,7 +89,3 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
       }
   }
 }
-
-class IOTabController @Inject()(val tabService: TabServiceAlgebra[IO],
-                                val cc: ControllerComponents,
-                                override val logger: MLogger[IO])(implicit ec: ExecutionContext) extends TabController[IO](tabService, cc, logger)
