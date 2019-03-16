@@ -26,5 +26,3 @@ class PlayLogger[F[_]] @Inject()(implicit M: Monad[F]) extends MLogger[F] {
     Logger.warn(s"[Warning] $s")
   }
 }
-
-class IOPlayLogger extends PlayLogger[IO]

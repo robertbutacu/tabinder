@@ -8,7 +8,6 @@ import logger.MLogger
 import models.Tab
 import models.types.Types.{Artist, SongName, Tuning}
 import repositories.TabRepositoryAlgebra
-
 import scala.language.higherKinds
 
 trait TabServiceAlgebra[F[_]] {

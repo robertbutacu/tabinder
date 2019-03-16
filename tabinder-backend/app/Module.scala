@@ -2,7 +2,7 @@ import cats.effect.IO
 import com.google.inject.{AbstractModule, TypeLiteral}
 import concrete.Concrete._
 import controllers.TabControllerAlgebra
-import logger.{IOPlayLogger, MLogger}
+import logger.MLogger
 import repositories.TabRepositoryAlgebra
 import services.TabServiceAlgebra
 

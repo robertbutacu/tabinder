@@ -3,13 +3,14 @@ package concrete
 import cats.effect.IO
 import controllers.TabController
 import javax.inject.Inject
-import logger.MLogger
+import logger.{MLogger, PlayLogger}
 import play.api.mvc.ControllerComponents
 import play.modules.reactivemongo.ReactiveMongoApi
 import repositories.{TabRepository, TabRepositoryAlgebra}
 import services.{TabService, TabServiceAlgebra}
 import cats.instances.all._
 import utils.FromFuture._
+
 import scala.concurrent.ExecutionContext
 
 object Concrete {
@@ -26,4 +27,5 @@ object Concrete {
   class IOTabService @Inject()(tabRepository: TabRepositoryAlgebra[IO],
                                logger: MLogger[IO]) extends TabService[IO](tabRepository, logger)
 
+  class IOPlayLogger extends PlayLogger[IO]
 }

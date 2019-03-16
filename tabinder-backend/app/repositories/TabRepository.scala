@@ -1,7 +1,7 @@
 package repositories
 
 import cats.syntax.flatMap._
-import cats.{MonadError, ~>}
+import cats.~>
 import javax.inject.Inject
 import models.Tab
 import models.types.Types.{Artist, SongName, ThrowableMonadError, Tuning}
