@@ -33,16 +33,12 @@ class TabRepository[F[_]: ThrowableMonadError] @Inject()()(implicit fromFuture: 
   }
 
   override def create(tab: Tab): F[Unit] = collection.flatMap(c => fromFuture(c.insert(tab).map(_ => ())))
-
   override def remove(tab: Tab): F[Unit] = collection.flatMap(c => fromFuture{ c.findAndRemove(tab).map(_ => ()) } )
 
-  override def getByArtist(artist: Artist): F[List[Tab]] = findAll(Json.obj("artist" -> artist.value))
-
-  override def getByTuning(tuning: Tuning): F[List[Tab]] = findAll(Json.obj("tuning" -> tuning.value))
-
+  override def getByArtist(artist: Artist): F[List[Tab]]   = findAll(Json.obj("artist" -> artist.value))
+  override def getByTuning(tuning: Tuning): F[List[Tab]]   = findAll(Json.obj("tuning" -> tuning.value))
   override def getBySong(songName: SongName): F[List[Tab]] = findAll(Json.obj("songName" -> songName))
-
-  override def getAll(): F[List[Tab]] = findAll(JsObject.empty)
+  override def getAll(): F[List[Tab]]                      = findAll(JsObject.empty)
 
   private def findAll(jsObject: JsObject): F[List[Tab]] = {
     collection.flatMap(c => fromFuture {

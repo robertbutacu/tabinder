@@ -19,10 +19,8 @@ object Concrete {
                                   val cc: ControllerComponents,
                                   override val logger: MLogger[IO])(implicit ec: ExecutionContext) extends TabController[IO](tabService, cc, logger)
 
-
   class IOTabRepository @Inject()(implicit reactiveMongoApi: ReactiveMongoApi,
                                   ec: ExecutionContext) extends TabRepository[IO]
-
 
   class IOTabService @Inject()(tabRepository: TabRepositoryAlgebra[IO],
                                logger: MLogger[IO]) extends TabService[IO](tabRepository, logger)
