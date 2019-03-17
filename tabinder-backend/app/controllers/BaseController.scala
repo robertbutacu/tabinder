@@ -1,7 +1,9 @@
 package controllers
 
-import cats.{Monad, MonadError}
+import cats.Monad
+import cats.syntax.applicative._
 import logger.MLogger
+import models.types.Types.ThrowableMonadError
 import play.api.libs.json.Json.toJson
 import play.api.libs.json._
 import play.api.mvc.Results.Status
@@ -21,16 +23,19 @@ trait BaseController[F[_]] {
       case JsSuccess(t, _) => f(t)
       case JsError(e)      =>
         logger.error("Failed parsing request with: " + e.toString())
-        M.pure(Status(400)(toJson("Bad body")))
-    }).getOrElse(M.pure(Status(400)(toJson("Missing body"))))
+        Status(400)(toJson("Bad body")).pure
+    }).getOrElse(Status(400)(toJson("Missing body")).pure)
   }
 
   def withRecover[T](f: => F[Result])(implicit ec: ExecutionContext,
-                                            M: MonadError[F, Throwable]): F[Result] = {
+                                            M: ThrowableMonadError[F]): F[Result] = {
     M.recoverWith(f) {
       case exp: JsResultException =>
-        logger.error("Failed with: " + exp.errors.toString())
-        M.pure(Status(500)("Something went wrong! Ooups!"))
+        logger.error("Failed parsing json with: " + exp.errors.toString())
+        Status(500)("Something went wrong! Ooups!").pure
+      case e: Throwable           =>
+        logger.error("Fatal error with: " + e.toString)
+        Status(500)("Something went wrong! Don't contact us, we'll contact you.").pure
     }
   }
 }
