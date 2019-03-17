@@ -27,6 +27,7 @@ trait BaseController[F[_]] {
     }).getOrElse(Status(400)(toJson("Missing body")).pure)
   }
 
+  //TODO refactor so JsResultException does not get here
   def withRecover[T](f: => F[Result])(implicit ec: ExecutionContext,
                                             M: ThrowableMonadError[F]): F[Result] = {
     M.recoverWith(f) {
