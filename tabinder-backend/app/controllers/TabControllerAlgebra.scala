@@ -9,7 +9,7 @@ import models.types.Types.{Artist, SongName, Tuning}
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.TabServiceAlgebra
-
+import utils.Utils.GenericAction
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
@@ -30,15 +30,13 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
   extends AbstractController(cc)
     with TabControllerAlgebra
     with BaseController[F] {
-  override def post(): Action[AnyContent] = Action.async {
-    implicit request: Request[AnyContent] =>
-      toFuture {
+  override def post(): Action[AnyContent] = Action.generic(parse.anyContent) {
+    implicit request =>
         withRecover {
           withValidJson[Tab] {
             tab => tabService.post(tab).map(_ => Ok)
           }
         }
-      }
   }
 
   override def delete(): Action[AnyContent] = Action.async {
