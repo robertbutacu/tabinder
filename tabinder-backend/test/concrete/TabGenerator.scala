@@ -1,8 +1,8 @@
 package concrete
 
+import eu.timepit.refined.auto._
 import models.Tab
 import org.scalacheck.Gen
-import eu.timepit.refined.auto._
 
 trait TabGenerator {
   def antoineDufourTabs: List[Tab] = List(

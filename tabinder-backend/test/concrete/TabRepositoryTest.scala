@@ -10,26 +10,16 @@ import scala.language.higherKinds
 import scala.util.Try
 
 object TabRepositoryTest {
-  class HappyPathRepository extends TabRepositoryAlgebra[Try] with TabGenerator {
-    override def create(tab: Tab): Try[Unit] = Applicative[Try].pure(Unit)
+  import cats.instances.all._
 
+  class HappyPathRepository(tabs: List[Tab]) extends TabRepositoryAlgebra[Try] with TabGenerator {
+    override def create(tab: Tab): Try[Unit] = Applicative[Try].pure(Unit)
     override def remove(tab: Tab): Try[Unit] = Applicative[Try].pure(Unit)
 
-    override def getByArtist(artist: Artist): Try[List[Tab]] = {
-      if(artist.value == "Antoine Dufour") Try(antoineDufourTabs)
-      else                                 Try(List.empty[Tab])
-    }
-
-    override def getByTuning(tuning: Tuning): Try[List[Tab]] = {
-      if(tuning.value == "Standard" || tuning.value == "EADGBD") Try(standardTuningTabs)
-      else                                                       Try(List.empty[Tab])
-    }
-
-    override def getBySong(songName: SongName): Try[List[Tab]] = ???
-
-    override def getAll(): Try[List[Tab]] = {
-      Try(standardTuningTabs ::: antoineDufourTabs)
-    }
+    override def getByArtist(artist: Artist): Try[List[Tab]]   = Try(tabs.filter(_.artist == artist))
+    override def getByTuning(tuning: Tuning): Try[List[Tab]]   = Try(tabs.filter(_.tuning == tuning))
+    override def getBySong(songName: SongName): Try[List[Tab]] = Try(tabs.filter(_.songName == songName))
+    override def getAll(): Try[List[Tab]] = Try(tabs)
   }
 
   type MutableRepositoryType[T] = State[List[Tab], T]
