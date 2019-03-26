@@ -1,6 +1,5 @@
 package services
 
-import cats.Functor
 import concrete.TabRepositoryTest.{HappyPathRepository, MutableRepository}
 import logger.PlayLogger
 import org.scalatest.{FlatSpec, Matchers}
