@@ -1,12 +1,9 @@
 package concrete
 
-import eu.timepit.refined.auto._
 import models.Tab
 import models.types.Types.Tuning
 import org.scalacheck.Gen
 import eu.timepit.refined.auto._
-
-import scala.util.Random
 
 trait TabGenerator {
   def antoineDufourTabs: List[Tab] = List(
