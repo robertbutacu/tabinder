@@ -9,81 +9,71 @@ import models.types.Types.{Artist, SongName, Tuning}
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.TabServiceAlgebra
-import utils.Utils.GenericAction
+import utils.Utils.AbstractGenericController
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
 trait TabControllerAlgebra {
-  def post(): Action[AnyContent]
-  def delete(): Action[AnyContent]
-
-  def getByArtist(artist: Artist):  Action[AnyContent]
-  def getByTuning(tuning: Tuning):  Action[AnyContent]
+  def post():                        Action[AnyContent]
+  def delete():                      Action[AnyContent]
+  def getByArtist(artist: Artist):   Action[AnyContent]
+  def getByTuning(tuning: Tuning):   Action[AnyContent]
   def getBySong(songName: SongName): Action[AnyContent]
-  def getAll(): Action[AnyContent]
+  def getAll():                      Action[AnyContent]
 }
 
 class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
                                     cc: ControllerComponents,
                                     val logger: MLogger[F])
                                    (implicit ec: ExecutionContext, toFuture: F ~> Future, M: MonadError[F, Throwable])
-  extends AbstractController(cc)
+  extends AbstractGenericController(cc)
     with TabControllerAlgebra
     with BaseController[F] {
-  override def post(): Action[AnyContent] = Action.generic(parse.anyContent) {
+  override def post(): Action[AnyContent] = GenericAction.generic(parse.anyContent) {
     implicit request =>
-        withRecover {
-          withValidJson[Tab] {
-            tab => tabService.post(tab).map(_ => Ok)
-          }
-        }
-  }
-
-  override def delete(): Action[AnyContent] = Action.async {
-    implicit request: Request[AnyContent] =>
-      toFuture {
-        withRecover {
-          withValidJson[Tab] {
-            tab => tabService.delete(tab).map(_ => Ok)
-          }
+      withRecover {
+        withValidJson[Tab] {
+          tab => tabService.post(tab).map(_ => Ok)
         }
       }
   }
 
-  override def getByArtist(artist: Artist): Action[AnyContent] = Action.async {
+  override def delete(): Action[AnyContent] = GenericAction.generic(parse.anyContent) {
     implicit request: Request[AnyContent] =>
-      toFuture {
-        withRecover {
-          tabService.getByArtist(artist).map(tabs => Ok(Json.toJson(tabs)))
+      withRecover {
+        withValidJson[Tab] {
+          tab => tabService.delete(tab).map(_ => Ok)
         }
       }
   }
 
-  override def getByTuning(tuning: Tuning): Action[AnyContent] = Action.async {
+  override def getByArtist(artist: Artist): Action[AnyContent] = GenericAction.genericAsync {
     implicit request: Request[AnyContent] =>
-      toFuture {
-        withRecover {
-          tabService.getByTuning(tuning).map(tabs => Ok(Json.toJson(tabs)))
-        }
+      withRecover {
+        tabService.getByArtist(artist).map(tabs => Ok(Json.toJson(tabs)))
       }
   }
 
-  override def getBySong(songName: SongName): Action[AnyContent] = Action.async {
+  override def getByTuning(tuning: Tuning): Action[AnyContent] = GenericAction.genericAsync {
+    implicit request: Request[AnyContent] =>
+      withRecover {
+        tabService.getByTuning(tuning).map(tabs => Ok(Json.toJson(tabs)))
+      }
+  }
+
+  override def getBySong(songName: SongName): Action[AnyContent] = GenericAction.genericAsync {
     implicit request: Request[AnyContent] => {
-      toFuture {
-        withRecover {
-          tabService.getBySong(songName).map(tabs => Ok(Json.toJson(tabs)))
-        }
+      withRecover {
+        tabService.getBySong(songName).map(tabs => Ok(Json.toJson(tabs)))
       }
     }
   }
 
-  override def getAll(): Action[AnyContent] = Action.async {
+  override def getAll(): Action[AnyContent] = GenericAction.genericAsync {
     implicit request: Request[AnyContent] =>
-      toFuture {
-        withRecover {
-          tabService.getAll().map(tabs => Ok(Json.toJson(tabs)))
-        }
+      withRecover {
+        tabService.getAll().map(tabs => Ok(Json.toJson(tabs)))
       }
   }
 }
