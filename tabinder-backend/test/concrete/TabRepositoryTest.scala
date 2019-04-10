@@ -19,7 +19,13 @@ object TabRepositoryTest {
     override def getByArtist(artist: Artist): Try[List[Tab]]   = Try(tabs.filter(_.artist == artist))
     override def getByTuning(tuning: Tuning): Try[List[Tab]]   = Try(tabs.filter(_.tuning == tuning))
     override def getBySong(songName: SongName): Try[List[Tab]] = Try(tabs.filter(_.songName == songName))
-    override def getAll(): Try[List[Tab]] = Try(tabs)
+    override def getAll: Try[List[Tab]] = Try(tabs)
+
+    override def getAllArtists: Try[List[Artist]] = ???
+
+    override def getAllTunings: Try[List[Tuning]] = ???
+
+    override def getAllSongs: Try[List[SongName]] = ???
   }
 
   type MutableRepositoryType[T] = State[List[Tab], T]
@@ -42,6 +48,12 @@ object TabRepositoryTest {
       internalState.inspect(tabs => tabs.filter(_.songName == songName))
     }
 
-    override def getAll(): MutableRepositoryType[List[Tab]] = internalState.get
+    override def getAll: MutableRepositoryType[List[Tab]] = internalState.get
+
+    override def getAllArtists: MutableRepositoryType[List[Artist]] = ???
+
+    override def getAllTunings: MutableRepositoryType[List[Tuning]] = ???
+
+    override def getAllSongs: MutableRepositoryType[List[SongName]] = ???
   }
 }

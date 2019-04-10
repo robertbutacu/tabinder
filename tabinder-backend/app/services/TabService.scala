@@ -11,12 +11,19 @@ import repositories.TabRepositoryAlgebra
 import scala.language.higherKinds
 
 trait TabServiceAlgebra[F[_]] {
-  def post(tab: Tab): F[Unit]
+  def post(tab: Tab):   F[Unit]
   def delete(tab: Tab): F[Unit]
-  def getByArtist(artist: Artist):   F[List[Tab]]
-  def getByTuning(tuning: Tuning):   F[List[Tab]]
+
+  def getAllArtists:               F[List[Artist]]
+  def getByArtist(artist: Artist): F[List[Tab]]
+
+  def getAllTunings:               F[List[Tuning]]
+  def getByTuning(tuning: Tuning): F[List[Tab]]
+
+  def getAllSongs:                   F[List[SongName]]
   def getBySong(songName: SongName): F[List[Tab]]
-  def getAll():                      F[List[Tab]]
+
+  def getAll:                      F[List[Tab]]
 }
 
 class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F], logger: MLogger[F]) extends TabServiceAlgebra[F] {
@@ -55,10 +62,16 @@ class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F], 
     } yield tabs
   }
 
-  override def getAll(): F[List[Tab]] = {
+  override def getAll: F[List[Tab]] = {
     for {
       _    <- logger.message("Retrieving all songs")
-      tabs <- tabRepository.getAll()
+      tabs <- tabRepository.getAll
     } yield tabs
   }
+
+  override def getAllArtists: F[List[Artist]] = ???
+
+  override def getAllTunings: F[List[Tuning]] = ???
+
+  override def getAllSongs: F[List[SongName]] = ???
 }

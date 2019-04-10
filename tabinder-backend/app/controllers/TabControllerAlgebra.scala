@@ -15,12 +15,19 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
 trait TabControllerAlgebra {
-  def post():                        Action[AnyContent]
-  def delete():                      Action[AnyContent]
-  def getByArtist(artist: Artist):   Action[AnyContent]
-  def getByTuning(tuning: Tuning):   Action[AnyContent]
+  def post():   Action[AnyContent]
+  def delete(): Action[AnyContent]
+
+  def getAllArtists:               Action[AnyContent]
+  def getByArtist(artist: Artist): Action[AnyContent]
+
+  def getAllTunings:               Action[AnyContent]
+  def getByTuning(tuning: Tuning): Action[AnyContent]
+
+  def getAllSongs:                   Action[AnyContent]
   def getBySong(songName: SongName): Action[AnyContent]
-  def getAll():                      Action[AnyContent]
+
+  def getAll:                      Action[AnyContent]
 }
 
 class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
@@ -70,10 +77,31 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
     }
   }
 
-  override def getAll(): Action[AnyContent] = GenericAction.genericAsync {
+  override def getAll: Action[AnyContent] = GenericAction.genericAsync {
     implicit request: Request[AnyContent] =>
       withRecover {
-        tabService.getAll().map(tabs => Ok(Json.toJson(tabs)))
+        tabService.getAll.map(tabs => Ok(Json.toJson(tabs)))
+      }
+  }
+
+  override def getAllArtists: Action[AnyContent] = GenericAction.genericAsync {
+    implicit request: Request[AnyContent] =>
+      withRecover {
+        tabService.getAllArtists.map(artists => Ok(Json.toJson(artists)))
+      }
+  }
+
+  override def getAllTunings: Action[AnyContent] = GenericAction.genericAsync {
+    implicit request: Request[AnyContent] =>
+      withRecover {
+        tabService.getAllTunings.map(tunings => Ok(Json.toJson(tunings)))
+      }
+  }
+
+  override def getAllSongs: Action[AnyContent] = GenericAction.genericAsync {
+    implicit request: Request[AnyContent] =>
+      withRecover {
+        tabService.getAllSongs.map(songs => Ok(Json.toJson(songs)))
       }
   }
 }

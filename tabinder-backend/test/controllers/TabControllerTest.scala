@@ -14,5 +14,11 @@ class TabControllerTest extends TabControllerAlgebra {
 
   override def getBySong(songName: SongName): Action[AnyContent] = ???
 
-  override def getAll(): Action[AnyContent] = ???
+  override def getAll: Action[AnyContent] = ???
+
+  override def getAllArtists: Action[AnyContent] = ???
+
+  override def getAllTunings: Action[AnyContent] = ???
+
+  override def getAllSongs: Action[AnyContent] = ???
 }
