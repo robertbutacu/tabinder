@@ -18,30 +18,30 @@ class TabServiceTest extends FlatSpec with Matchers with TabGenerator {
   val service = new TabService[Try](happyPathRepository, logger)
 
   "Tab service" should "return all tabs from repository" in {
-    service.getAll().get shouldBe allTabs
+    service.getAll.foreach(r => r shouldBe allTabs)
   }
 
   "Tab service" should "return filtered tabs" in {
-    service.getByArtist("Antoine Dufour").get shouldBe antoineDufourTabs
+    service.getByArtist("Antoine Dufour").foreach(r => r shouldBe antoineDufourTabs)
   }
 
   "Tab service" should "return empty list for unknown artists" in {
-    service.getByArtist("unknown artist").get shouldBe List.empty[Tab]
+    service.getByArtist("unknown artist").foreach(r => r shouldBe List.empty[Tab])
   }
 
   "Tab service" should "return the correct song" in {
-    service.getBySong(antoineDufourTab.songName).get shouldBe List(antoineDufourTab)
+    service.getBySong(antoineDufourTab.songName).foreach(r => r shouldBe List(antoineDufourTab))
   }
 
   "Tab service" should "return empty list for unknown song" in {
-    service.getBySong("unknown song").get shouldBe List.empty[Tab]
+    service.getBySong("unknown song").foreach(r => r shouldBe List.empty[Tab])
   }
 
   "Tab service" should "return correct songs by tuning" in {
-    service.getByTuning("Standard").get shouldBe standardTuningTabs
+    service.getByTuning("Standard").foreach(r => r shouldBe standardTuningTabs)
   }
 
   "Tab service" should "return empty list if it doesnt exist" in {
-    service.getByTuning("DADGAD").get shouldBe List.empty[Tab]
+    service.getByTuning("DADGAD").foreach(r => r shouldBe List.empty[Tab])
   }
 }

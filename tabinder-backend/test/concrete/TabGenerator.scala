@@ -1,9 +1,10 @@
 package concrete
 
 import models.Tab
-import models.types.Types.Tuning
+import models.types.Types._
 import org.scalacheck.Gen
 import eu.timepit.refined.auto._
+import eu.timepit.refined._
 
 trait TabGenerator {
   def antoineDufourTabs: List[Tab] = List(
@@ -34,12 +35,12 @@ trait TabGenerator {
         (acc, _) =>
           val currentString = tuningLetterGen.sample.get + inSharpGen.sample.get
           acc + currentString
-      })
+      }).map(s => refineV[ValidTuningFormat](s).right.get)
     }
 
     Gen.oneOf(randomTuningGen, Gen.const("Standard": Tuning))
   }
 
-  private def artistGenerator: Gen[String]   = Gen.alphaStr
-  private def songNameGenerator: Gen[String] = Gen.alphaStr
+  private def artistGenerator: Gen[Artist]     = Gen.alphaStr.map(s => refineV[ValidArtistName](s).right.get)
+  private def songNameGenerator: Gen[SongName] = Gen.alphaStr
 }

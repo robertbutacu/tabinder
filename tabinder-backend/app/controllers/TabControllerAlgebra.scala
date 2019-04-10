@@ -10,6 +10,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import services.TabServiceAlgebra
 import utils.Utils.AbstractGenericController
+import eu.timepit.refined.auto._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
@@ -87,21 +88,21 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
   override def getAllArtists: Action[AnyContent] = GenericAction.genericAsync {
     implicit request: Request[AnyContent] =>
       withRecover {
-        tabService.getAllArtists.map(artists => Ok(Json.toJson(artists)))
+        tabService.getAllArtists.map(artists => Ok)
       }
   }
 
   override def getAllTunings: Action[AnyContent] = GenericAction.genericAsync {
     implicit request: Request[AnyContent] =>
       withRecover {
-        tabService.getAllTunings.map(tunings => Ok(Json.toJson(tunings)))
+        tabService.getAllTunings.map(tunings => Ok)
       }
   }
 
   override def getAllSongs: Action[AnyContent] = GenericAction.genericAsync {
     implicit request: Request[AnyContent] =>
       withRecover {
-        tabService.getAllSongs.map(songs => Ok(Json.toJson(songs)))
+        tabService.getAllSongs.map(songs => Ok)
       }
   }
 }
