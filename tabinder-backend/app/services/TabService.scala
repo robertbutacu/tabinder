@@ -1,8 +1,7 @@
 package services
 
 import cats.Monad
-import cats.syntax.flatMap._
-import cats.syntax.functor._
+import cats.syntax.all._
 import javax.inject.Inject
 import logger.MLogger
 import models.Tab

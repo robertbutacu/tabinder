@@ -38,7 +38,7 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
   extends AbstractGenericController(cc)
     with TabControllerAlgebra
     with BaseController[F] {
-  override def post(): Action[AnyContent] = GenericAction.generic(parse.anyContent) {
+  override def post(): Action[AnyContent] = GenericAction.async(parse.anyContent) {
     implicit request =>
       withRecover {
         withValidJson[Tab] {
@@ -47,7 +47,12 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
       }
   }
 
-  override def delete(): Action[AnyContent] = GenericAction.generic(parse.anyContent) {
+  def test(): Action[AnyContent] = Action {
+    _ =>
+      Ok
+  }
+
+  override def delete(): Action[AnyContent] = GenericAction.async(parse.anyContent) {
     implicit request: Request[AnyContent] =>
       withRecover {
         withValidJson[Tab] {
@@ -56,21 +61,21 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
       }
   }
 
-  override def getByArtist(artist: Artist): Action[AnyContent] = GenericAction.genericAsync {
+  override def getByArtist(artist: Artist): Action[AnyContent] = GenericAction.async {
     implicit request: Request[AnyContent] =>
       withRecover {
         tabService.getByArtist(artist).map(tabs => Ok(Json.toJson(tabs)))
       }
   }
 
-  override def getByTuning(tuning: Tuning): Action[AnyContent] = GenericAction.genericAsync {
+  override def getByTuning(tuning: Tuning): Action[AnyContent] = GenericAction.async {
     implicit request: Request[AnyContent] =>
       withRecover {
         tabService.getByTuning(tuning).map(tabs => Ok(Json.toJson(tabs)))
       }
   }
 
-  override def getBySong(songName: SongName): Action[AnyContent] = GenericAction.genericAsync {
+  override def getBySong(songName: SongName): Action[AnyContent] = GenericAction.async {
     implicit request: Request[AnyContent] => {
       withRecover {
         tabService.getBySong(songName).map(tabs => Ok(Json.toJson(tabs)))
@@ -78,28 +83,28 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
     }
   }
 
-  override def getAll: Action[AnyContent] = GenericAction.genericAsync {
+  override def getAll: Action[AnyContent] = GenericAction.async {
     implicit request: Request[AnyContent] =>
       withRecover {
         tabService.getAll.map(tabs => Ok(Json.toJson(tabs)))
       }
   }
 
-  override def getAllArtists: Action[AnyContent] = GenericAction.genericAsync {
+  override def getAllArtists: Action[AnyContent] = GenericAction.async {
     implicit request: Request[AnyContent] =>
       withRecover {
         tabService.getAllArtists.map(artists => Ok)
       }
   }
 
-  override def getAllTunings: Action[AnyContent] = GenericAction.genericAsync {
+  override def getAllTunings: Action[AnyContent] = GenericAction.async {
     implicit request: Request[AnyContent] =>
       withRecover {
         tabService.getAllTunings.map(tunings => Ok)
       }
   }
 
-  override def getAllSongs: Action[AnyContent] = GenericAction.genericAsync {
+  override def getAllSongs: Action[AnyContent] = GenericAction.async {
     implicit request: Request[AnyContent] =>
       withRecover {
         tabService.getAllSongs.map(songs => Ok)
