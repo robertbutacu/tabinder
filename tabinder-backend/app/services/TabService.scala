@@ -77,7 +77,7 @@ class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F],
     for {
       _       <- logger.message("Retrieving all artists")
       artists <- tabRepository.getAllArtists
-      result  = artists.map(a => HATEOASResource(a, routes.TabControllerAlgebra.getByArtist(a).url))
+      result  = artists.map(a => HATEOASResource("artist", a, routes.TabControllerAlgebra.getByArtist(a).url))
     } yield result
   }
 
@@ -85,7 +85,7 @@ class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F],
     for {
       _       <- logger.message("Retrieving all tunings")
       tunings <- tabRepository.getAllTunings
-      result  = tunings.map(t => HATEOASResource(t, routes.TabControllerAlgebra.getByTuning(t).url))
+      result  = tunings.map(t => HATEOASResource("tuning", t, routes.TabControllerAlgebra.getByTuning(t).url))
     } yield result
   }
 
@@ -93,7 +93,7 @@ class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F],
     for {
       _     <- logger.message("Retrieving all songs")
       songs <- tabRepository.getAllSongs
-      result  = songs.map(s => HATEOASResource(s, routes.TabControllerAlgebra.getBySong(s).url))
+      result  = songs.map(s => HATEOASResource("songname", s, routes.TabControllerAlgebra.getBySong(s).url))
     } yield result
   }
 
