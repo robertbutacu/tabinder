@@ -13,13 +13,13 @@ trait TabServiceAlgebra[F[_]] {
   def post(tab: Tab):   F[Unit]
   def delete(tab: Tab): F[Unit]
 
-  def getAllArtists:               F[List[Artist]]
+  def getAllArtists:               F[Set[Artist]]
   def getByArtist(artist: Artist): F[List[Tab]]
 
-  def getAllTunings:               F[List[Tuning]]
+  def getAllTunings:               F[Set[Tuning]]
   def getByTuning(tuning: Tuning): F[List[Tab]]
 
-  def getAllSongs:                   F[List[SongName]]
+  def getAllSongs:                   F[Set[SongName]]
   def getBySong(songName: SongName): F[List[Tab]]
 
   def getAll:                      F[List[Tab]]
@@ -68,9 +68,24 @@ class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F], 
     } yield tabs
   }
 
-  override def getAllArtists: F[List[Artist]] = ???
+  override def getAllArtists: F[Set[Artist]] = {
+    for {
+      _       <- logger.message("Retrieving all artists")
+      artists <- tabRepository.getAllArtists
+    } yield artists
+  }
 
-  override def getAllTunings: F[List[Tuning]] = ???
+  override def getAllTunings: F[Set[Tuning]] = {
+    for {
+      _       <- logger.message("Retrieving all tunings")
+      tunings <- tabRepository.getAllTunings
+    } yield tunings
+  }
 
-  override def getAllSongs: F[List[SongName]] = ???
+  override def getAllSongs: F[Set[SongName]] = {
+    for {
+      _     <- logger.message("Retrieving all songs")
+      songs <- tabRepository.getAllSongs
+    } yield songs
+  }
 }

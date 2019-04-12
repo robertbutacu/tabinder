@@ -1,6 +1,6 @@
 package repositories
 
-import cats.syntax.flatMap._
+import cats.syntax.all._
 import cats.~>
 import javax.inject.Inject
 import models.Tab
@@ -11,7 +11,6 @@ import reactivemongo.api.Cursor.FailOnError
 import reactivemongo.api.ReadPreference
 import reactivemongo.play.json.ImplicitBSONHandlers
 import reactivemongo.play.json.collection.JSONCollection
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
@@ -19,13 +18,13 @@ trait TabRepositoryAlgebra[F[_]] {
   def create(tab: Tab): F[Unit]
   def remove(tab: Tab): F[Unit]
 
-  def getAllArtists:               F[List[Artist]]
+  def getAllArtists:               F[Set[Artist]]
   def getByArtist(artist: Artist):   F[List[Tab]]
 
-  def getAllTunings:               F[List[Tuning]]
+  def getAllTunings:               F[Set[Tuning]]
   def getByTuning(tuning: Tuning):   F[List[Tab]]
 
-  def getAllSongs:                 F[List[SongName]]
+  def getAllSongs:                 F[Set[SongName]]
   def getBySong(songName: SongName): F[List[Tab]]
 
   def getAll:                      F[List[Tab]]
@@ -55,9 +54,15 @@ class TabRepository[F[_]: ThrowableMonadError] @Inject()()(implicit fromFuture: 
     })
   }
 
-  override def getAllArtists: F[List[Artist]] = ???
+  override def getAllArtists: F[Set[Artist]] = {
+    findAll(JsObject.empty).map(_.map(_.artist).toSet)
+  }
 
-  override def getAllTunings: F[List[Tuning]] = ???
+  override def getAllTunings: F[Set[Tuning]] = {
+    findAll(JsObject.empty).map(_.map(_.tuning).toSet)
+  }
 
-  override def getAllSongs: F[List[SongName]] = ???
+  override def getAllSongs: F[Set[SongName]] = {
+    findAll(JsObject.empty).map(_.map(_.songName).toSet)
+  }
 }

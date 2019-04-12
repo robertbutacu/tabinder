@@ -5,13 +5,13 @@ import cats.{MonadError, ~>}
 import javax.inject.Inject
 import logger.MLogger
 import models._
+import models.types._
 import models.types.Types.{Artist, SongName, Tuning}
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.TabServiceAlgebra
 import utils.Utils.AbstractGenericController
 import eu.timepit.refined.auto._
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
@@ -93,21 +93,21 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
   override def getAllArtists: Action[AnyContent] = GenericAction.async {
     implicit request: Request[AnyContent] =>
       withRecover {
-        tabService.getAllArtists.map(artists => Ok)
+        tabService.getAllArtists.map(artists => Ok(Json.toJson(artists)))
       }
   }
 
   override def getAllTunings: Action[AnyContent] = GenericAction.async {
     implicit request: Request[AnyContent] =>
       withRecover {
-        tabService.getAllTunings.map(tunings => Ok)
+        tabService.getAllTunings.map(tunings => Ok(Json.toJson(tunings)))
       }
   }
 
   override def getAllSongs: Action[AnyContent] = GenericAction.async {
     implicit request: Request[AnyContent] =>
       withRecover {
-        tabService.getAllSongs.map(songs => Ok)
+        tabService.getAllSongs.map(songs => Ok(Json.toJson(songs)))
       }
   }
 }
