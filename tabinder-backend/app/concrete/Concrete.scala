@@ -30,7 +30,8 @@ object Concrete {
 
   class IOTestController @Inject()(cc: ControllerComponents,
                                    actions: ComposedActions[IO],
-                                   override val logger: MLogger[IO])(implicit ec: ExecutionContext) extends TestController[IO](cc, actions, logger)
+                                   tabService: TabServiceAlgebra[IO],
+                                   override val logger: MLogger[IO])(implicit ec: ExecutionContext) extends TestController[IO](cc, actions, tabService, logger)
 
   class IOComposedActions @Inject()(
                                        requestFiltered: RequestFiltered[IO],
