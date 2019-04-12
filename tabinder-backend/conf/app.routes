@@ -17,3 +17,5 @@ GET       /tabinder/tabs/tunings/:tuning       controllers.TabControllerAlgebra.
 
 POST      /tabinder/tabs                       controllers.TabControllerAlgebra.post
 DELETE    /tabinder/tabs                       controllers.TabControllerAlgebra.delete
+
+GET       /tabinder/test                       controllers.TestControllerAlgebra.someGet
