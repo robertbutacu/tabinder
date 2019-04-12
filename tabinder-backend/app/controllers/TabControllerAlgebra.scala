@@ -4,14 +4,13 @@ import cats.syntax.functor._
 import cats.{MonadError, ~>}
 import javax.inject.Inject
 import logger.MLogger
-import models._
 import models.types._
 import models.types.Types.{Artist, SongName, Tuning}
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.TabServiceAlgebra
 import utils.Utils.AbstractGenericController
-import eu.timepit.refined.auto._
+import models.data.Tab
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 

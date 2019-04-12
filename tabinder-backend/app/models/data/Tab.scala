@@ -1,9 +1,8 @@
-package models
+package models.data
 
 import models.types.Types.{Artist, SongName, Tuning}
-import models.types._
 import play.api.libs.json.{Json, OFormat}
-import eu.timepit.refined.auto._
+import models.types._
 
 case class Tab(artist: Artist,
                songName: SongName,

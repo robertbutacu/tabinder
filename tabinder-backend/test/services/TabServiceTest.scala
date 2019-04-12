@@ -6,7 +6,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import cats.instances.all._
 import concrete.TabGenerator
 import eu.timepit.refined.auto._
-import models.Tab
+import models.data.Tab
 
 import scala.util.Try
 

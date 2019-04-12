@@ -2,30 +2,35 @@ package services
 
 import cats.Monad
 import cats.syntax.all._
+import controllers.routes
 import javax.inject.Inject
 import logger.MLogger
-import models.Tab
+import models.api.HATEOASResource
+import models.data.Tab
 import models.types.Types.{Artist, SongName, Tuning}
 import repositories.TabRepositoryAlgebra
+
 import scala.language.higherKinds
 
 trait TabServiceAlgebra[F[_]] {
   def post(tab: Tab):   F[Unit]
   def delete(tab: Tab): F[Unit]
 
-  def getAllArtists:               F[Set[Artist]]
+  def getAllArtists:               F[Set[HATEOASResource[Artist]]]
   def getByArtist(artist: Artist): F[List[Tab]]
 
-  def getAllTunings:               F[Set[Tuning]]
+  def getAllTunings:               F[Set[HATEOASResource[Tuning]]]
   def getByTuning(tuning: Tuning): F[List[Tab]]
 
-  def getAllSongs:                   F[Set[SongName]]
+  def getAllSongs:                   F[Set[HATEOASResource[SongName]]]
   def getBySong(songName: SongName): F[List[Tab]]
 
   def getAll:                      F[List[Tab]]
 }
 
-class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F], logger: MLogger[F]) extends TabServiceAlgebra[F] {
+class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F],
+                                        logger: MLogger[F]) extends TabServiceAlgebra[F] {
+
   override def post(tab: Tab): F[Unit] = {
     for {
       _ <- logger.message("Creating tab: " + tab)
@@ -68,24 +73,29 @@ class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F], 
     } yield tabs
   }
 
-  override def getAllArtists: F[Set[Artist]] = {
+  override def getAllArtists: F[Set[HATEOASResource[Artist]]] = {
     for {
       _       <- logger.message("Retrieving all artists")
       artists <- tabRepository.getAllArtists
-    } yield artists
+      result  = artists.map(a => HATEOASResource(a, routes.TabControllerAlgebra.getByArtist(a).url))
+    } yield result
   }
 
-  override def getAllTunings: F[Set[Tuning]] = {
+  override def getAllTunings: F[Set[HATEOASResource[Tuning]]] = {
     for {
       _       <- logger.message("Retrieving all tunings")
       tunings <- tabRepository.getAllTunings
-    } yield tunings
+      result  = tunings.map(t => HATEOASResource(t, routes.TabControllerAlgebra.getByTuning(t).url))
+    } yield result
   }
 
-  override def getAllSongs: F[Set[SongName]] = {
+  override def getAllSongs: F[Set[HATEOASResource[SongName]]] = {
     for {
       _     <- logger.message("Retrieving all songs")
       songs <- tabRepository.getAllSongs
-    } yield songs
+      result  = songs.map(s => HATEOASResource(s, routes.TabControllerAlgebra.getBySong(s).url))
+    } yield result
   }
+
+
 }

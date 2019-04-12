@@ -2,10 +2,11 @@ package concrete
 
 import cats.Applicative
 import cats.data.State
-import models.Tab
 import models.types.Types.{Artist, SongName, Tuning}
 import repositories.TabRepositoryAlgebra
 import State._
+import models.data.Tab
+
 import scala.language.higherKinds
 import scala.util.Try
 

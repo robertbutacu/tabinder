@@ -3,7 +3,7 @@ package repositories
 import cats.syntax.all._
 import cats.~>
 import javax.inject.Inject
-import models.Tab
+import models.data.Tab
 import models.types.Types.{Artist, SongName, ThrowableMonadError, Tuning}
 import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoApi
@@ -11,6 +11,7 @@ import reactivemongo.api.Cursor.FailOnError
 import reactivemongo.api.ReadPreference
 import reactivemongo.play.json.ImplicitBSONHandlers
 import reactivemongo.play.json.collection.JSONCollection
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
