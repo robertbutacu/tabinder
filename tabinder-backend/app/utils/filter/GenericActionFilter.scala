@@ -14,7 +14,4 @@ trait GenericActionFilter[F[_], R[_]] extends ActionFilter[R] {
   def genericFilter[A](request: R[A]): F[Option[Result]]
 
   override protected def filter[A](request: R[A]): Future[Option[Result]] = transformer(genericFilter(request))
-
-  final protected def refine[A](request: R[A])(implicit FF: Functor[F]): F[Either[Result, R[A]]] =
-    genericFilter(request).map(_.toLeft(request))
 }

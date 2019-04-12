@@ -7,7 +7,7 @@ import logger.MLogger
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Utils.AbstractGenericController
-
+import utils.filter.GenericActionBuilder.GenericActionBuilder
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
@@ -23,7 +23,7 @@ class TestController[F[+_]] @Inject()(cc: ControllerComponents,
     with TestControllerAlgebra
     with BaseController[F] {
 
-  override def someGet: Action[AnyContent] = GenericAction.async {
+  override def someGet: Action[AnyContent] = actions.filtered.genericAsync {
     implicit request => M.pure(Ok(Json.toJson("abc")))
   }
 }
