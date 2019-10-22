@@ -4,7 +4,7 @@ import concrete.TabRepositoryTest.{HappyPathRepository, MutableRepository}
 import logger.PlayLogger
 import org.scalatest.{FlatSpec, Matchers}
 import cats.instances.all._
-import concrete.{TabGenerator, TestData}
+import concrete.TestData
 import eu.timepit.refined.auto._
 import models.data.Tab
 

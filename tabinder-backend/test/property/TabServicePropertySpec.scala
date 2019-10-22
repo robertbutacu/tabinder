@@ -2,16 +2,16 @@ package property
 
 import cats.Traverse
 import concrete.TabRepositoryTest.{MutableRepository, MutableRepositoryType}
-import logger.PlayLogger
 import models.data.Tab
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 import services.TabService
 import cats.instances.all._
-import concrete.TabGenerator
+import concrete.{SilentLog, TabGenerator}
 import cats.syntax.all._
 
 class TabServicePropertySpec extends Properties("TabServiceAlgebra") with TabGenerator {
+
   property("a posted tab can then be retrieved") = forAll { (t: Tab, otherTabs: List[Tab]) =>
     val tabs = otherTabs :+ t
     withRepositorySetup(tabs) {
@@ -28,6 +28,7 @@ class TabServicePropertySpec extends Properties("TabServiceAlgebra") with TabGen
         retrievalBySong.contains(t) && retrievalByTuning.contains(t) && retrievalByArtist.contains(t)
     }
   }
+
   property("a deleted tab cannot be retrieved") = forAll { (t: Tab, otherTabs: List[Tab]) =>
     val tabs = otherTabs :+ t
     withRepositorySetup(tabs) {
@@ -47,7 +48,7 @@ class TabServicePropertySpec extends Properties("TabServiceAlgebra") with TabGen
 
   def withRepositorySetup[A](tabs: List[Tab])(test: TabService[MutableRepositoryType] => A): A = {
     val repository = new MutableRepository
-    val service    = new TabService[MutableRepositoryType](repository, new PlayLogger[MutableRepositoryType]())
+    val service    = new TabService[MutableRepositoryType](repository, new SilentLog[MutableRepositoryType]())
 
     test(service)
   }
