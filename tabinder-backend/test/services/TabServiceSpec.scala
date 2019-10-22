@@ -4,13 +4,13 @@ import concrete.TabRepositoryTest.{HappyPathRepository, MutableRepository}
 import logger.PlayLogger
 import org.scalatest.{FlatSpec, Matchers}
 import cats.instances.all._
-import concrete.TabGenerator
+import concrete.{TabGenerator, TestData}
 import eu.timepit.refined.auto._
 import models.data.Tab
 
 import scala.util.Try
 
-class TabServiceSpec extends FlatSpec with Matchers with TabGenerator {
+class TabServiceSpec extends FlatSpec with Matchers with TestData {
   val logger              = new PlayLogger[Try]
   val allTabs             = standardTuningTabs ::: antoineDufourTabs
   val happyPathRepository = new HappyPathRepository(allTabs)
