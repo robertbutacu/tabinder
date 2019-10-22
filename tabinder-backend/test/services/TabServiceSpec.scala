@@ -10,7 +10,7 @@ import models.data.Tab
 
 import scala.util.Try
 
-class TabServiceTest extends FlatSpec with Matchers with TabGenerator {
+class TabServiceSpec extends FlatSpec with Matchers with TabGenerator {
   val logger              = new PlayLogger[Try]
   val allTabs             = standardTuningTabs ::: antoineDufourTabs
   val happyPathRepository = new HappyPathRepository(allTabs)
