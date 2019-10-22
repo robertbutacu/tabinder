@@ -46,11 +46,6 @@ class TabController[F[_]] @Inject()(tabService: TabServiceAlgebra[F],
       }
   }
 
-  def test(): Action[AnyContent] = Action {
-    _ =>
-      Ok
-  }
-
   override def delete(): Action[AnyContent] = GenericAction.async(parse.anyContent) {
     implicit request: Request[AnyContent] =>
       withRecover {
