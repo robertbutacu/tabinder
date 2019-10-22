@@ -13,9 +13,9 @@ import scala.language.higherKinds
 
 object Types {
   type ThrowableMonadError[F[_]] = MonadError[F, Throwable]
-  type Artist   = Refined[String, ValidArtistName]
-  type SongName = String
-  type Tuning   = Refined[String, ValidTuningFormat]
+  type Artist                    = Refined[String, ValidArtistName]
+  type SongName                  = String
+  type Tuning                    = Refined[String, ValidTuningFormat]
 
   type ValidArtistName   = Forall[Or[Letter, Whitespace]]
   type ValidTuningFormat = Or[Equal[W.`"""Standard"""`.T], MatchesRegex[W.`"""([ABCDEFG](#)?){6}"""`.T]]

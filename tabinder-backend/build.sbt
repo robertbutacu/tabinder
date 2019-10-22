@@ -18,11 +18,11 @@ libraryDependencies ++= Seq(
   "eu.timepit"        %% "refined"                  % "0.9.4",
   "org.typelevel"     %% "cats-core"                % "1.6.0",
   "org.typelevel"     %% "cats-effect"              % "1.2.0",
-  "org.scalacheck"    %% "scalacheck"               % "1.14.0",
+  "org.scalacheck"    %% "scalacheck"               % "1.14.0"         % "test",
   "org.reactivemongo" %% "reactivemongo-play-json"  % "0.16.0-play26",
   "org.reactivemongo" %% "play2-reactivemongo"      % reactiveMongoVer,
   "be.venneborg"      %% "play26-refined"           % "0.3.0",
-  "org.scalatest"     %% "scalatest"                % "3.0.4"          % "test"
+  "org.scalatest"     %% "scalatest"                % "3.0.4"          % "test",
 )
 
 routesImport ++= Seq(

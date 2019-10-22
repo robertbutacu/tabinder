@@ -96,6 +96,4 @@ class TabService[F[_]: Monad] @Inject()(tabRepository: TabRepositoryAlgebra[F],
       result  = songs.map(s => HATEOASResource("songname", s, routes.TabControllerAlgebra.getBySong(s).url))
     } yield result
   }
-
-
 }
