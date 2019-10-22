@@ -22,7 +22,7 @@ libraryDependencies ++= Seq(
   "org.reactivemongo" %% "reactivemongo-play-json"  % "0.16.0-play26",
   "org.reactivemongo" %% "play2-reactivemongo"      % reactiveMongoVer,
   "be.venneborg"      %% "play26-refined"           % "0.3.0",
-  "org.scalatest"     %% "scalatest"                % "3.0.4"          % "test",
+  "org.scalatest"     %% "scalatest"                % "3.0.4"          % "test"
 )
 
 routesImport ++= Seq(

@@ -13,7 +13,7 @@ trait MLogger[F[_]] {
   def warning(s: String): F[Unit]
 }
 
-class PlayLogger[F[_]: Applicative] @Inject() extends MLogger[F] {
+class PlayLogger[F[_]: Applicative]() extends MLogger[F] {
   override def error(s: String): F[Unit]   = Logger.error(s"[Error] $s").pure
   override def message(s: String): F[Unit] = Logger.info(s"[Message] $s").pure
   override def warning(s: String): F[Unit] = Logger.warn(s"[Warning] $s").pure

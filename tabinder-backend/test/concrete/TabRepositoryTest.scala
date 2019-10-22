@@ -6,7 +6,7 @@ import models.types.Types.{Artist, SongName, Tuning}
 import repositories.TabRepositoryAlgebra
 import State._
 import models.data.Tab
-
+import cats.syntax.all._
 import scala.language.higherKinds
 import scala.util.Try
 
@@ -35,7 +35,7 @@ object TabRepositoryTest {
     private val internalState: MutableRepositoryType[Unit] = State { tabs => (tabs, ())}
 
     override def create(tab: Tab): MutableRepositoryType[Unit] = internalState.modify(tabs => tabs :+ tab)
-    override def remove(tab: Tab): MutableRepositoryType[Unit] = internalState.modify(tabs => tabs.filter(_ == tab))
+    override def remove(tab: Tab): MutableRepositoryType[Unit] = internalState.modify(tabs => tabs.filterNot(_ === tab))
 
     override def getByArtist(artist: Artist): MutableRepositoryType[List[Tab]] = {
       internalState.inspect(tabs => tabs.filter(_.artist == artist))

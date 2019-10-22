@@ -1,7 +1,7 @@
 package concrete
 
 import models.types.Types._
-import org.scalacheck.Gen
+import org.scalacheck.{Arbitrary, Gen}
 import eu.timepit.refined.auto._
 import eu.timepit.refined._
 import models.data.Tab
@@ -14,6 +14,8 @@ trait TabGenerator {
       tuning   <- tuningGenerator
     } yield Tab(artist, songname, tuning)
   }
+
+  implicit val tabArbitrary: Arbitrary[Tab] = Arbitrary(tabGenerator)
 
   private def tuningGenerator : Gen[Tuning]= {
     val tuningLetterGen: Gen[String] = Gen.oneOf("A","B","C","D","E","F","G")
